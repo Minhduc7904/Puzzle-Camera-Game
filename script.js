@@ -213,56 +213,13 @@ function playCenterEffectsSequence(imageFileNames) {
 }
 
 function resizeCanvasToVideo() {
-    const width = Math.max(
-        1,
-        Math.floor(videoEl.clientWidth || canvasEl.clientWidth || window.innerWidth)
-    );
-    const height = Math.max(
-        1,
-        Math.floor(videoEl.clientHeight || canvasEl.clientHeight || window.innerHeight)
-    );
+    const width = videoEl.videoWidth || window.innerWidth;
+    const height = videoEl.videoHeight || window.innerHeight;
 
     if (canvasEl.width !== width || canvasEl.height !== height) {
         canvasEl.width = width;
         canvasEl.height = height;
     }
-}
-
-function drawImageCover(ctx, sourceImage, targetWidth, targetHeight) {
-    const sourceWidth = sourceImage.videoWidth || sourceImage.naturalWidth || sourceImage.width;
-    const sourceHeight = sourceImage.videoHeight || sourceImage.naturalHeight || sourceImage.height;
-
-    if (!sourceWidth || !sourceHeight || !targetWidth || !targetHeight) {
-        return;
-    }
-
-    const sourceAspect = sourceWidth / sourceHeight;
-    const targetAspect = targetWidth / targetHeight;
-
-    let cropWidth = sourceWidth;
-    let cropHeight = sourceHeight;
-    let cropX = 0;
-    let cropY = 0;
-
-    if (sourceAspect > targetAspect) {
-        cropWidth = sourceHeight * targetAspect;
-        cropX = (sourceWidth - cropWidth) / 2;
-    } else {
-        cropHeight = sourceWidth / targetAspect;
-        cropY = (sourceHeight - cropHeight) / 2;
-    }
-
-    ctx.drawImage(
-        sourceImage,
-        cropX,
-        cropY,
-        cropWidth,
-        cropHeight,
-        0,
-        0,
-        targetWidth,
-        targetHeight
-    );
 }
 
 function distance2d(pointA, pointB) {
@@ -884,7 +841,7 @@ function drawPuzzleFrame(sourceImage, multiHandLandmarks) {
         resizeCanvasToVideo();
         canvasCtx.save();
         canvasCtx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-        drawImageCover(canvasCtx, sourceImage, canvasEl.width, canvasEl.height);
+        canvasCtx.drawImage(sourceImage, 0, 0, canvasEl.width, canvasEl.height);
         canvasCtx.restore();
         hudEl.textContent = "Hoàn thành! Sẵn sàng cho lượt chơi mới";
         return;
@@ -893,7 +850,7 @@ function drawPuzzleFrame(sourceImage, multiHandLandmarks) {
     resizeCanvasToVideo();
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-    drawImageCover(canvasCtx, sourceImage, canvasEl.width, canvasEl.height);
+    canvasCtx.drawImage(sourceImage, 0, 0, canvasEl.width, canvasEl.height);
     drawPuzzleSnapshot();
     drawSwapHoverFeedback(now);
     drawGrabCandidateFeedback(now);
@@ -983,7 +940,7 @@ function drawHands(results) {
 
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-    drawImageCover(canvasCtx, results.image, canvasEl.width, canvasEl.height);
+    canvasCtx.drawImage(results.image, 0, 0, canvasEl.width, canvasEl.height);
     drawCapturedSnapshot();
 
     const handCount = results.multiHandLandmarks ? results.multiHandLandmarks.length : 0;
