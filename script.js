@@ -46,6 +46,46 @@ let gameStartedAtMs = 0;
 let currentScoreMs = 0;
 let bestScoreMs = 0;
 let centerEffectTimeoutId = 0;
+let orientationSyncTimer = 0;
+
+function getPreferredCameraConstraints() {
+    const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+
+    return {
+        width: { ideal: isLandscape ? 1280 : 720 },
+        height: { ideal: isLandscape ? 720 : 1280 },
+        aspectRatio: { ideal: isLandscape ? 16 / 9 : 9 / 16 },
+    };
+}
+
+async function syncCameraOrientationToDevice() {
+    if (!currentStream) {
+        return;
+    }
+
+    const [videoTrack] = currentStream.getVideoTracks();
+    if (!videoTrack || !videoTrack.applyConstraints) {
+        return;
+    }
+
+    try {
+        await videoTrack.applyConstraints(getPreferredCameraConstraints());
+        resizeCanvasToVideo();
+    } catch (error) {
+        // Some devices do not support dynamic orientation constraints.
+    }
+}
+
+function scheduleCameraOrientationSync() {
+    if (orientationSyncTimer) {
+        clearTimeout(orientationSyncTimer);
+    }
+
+    orientationSyncTimer = setTimeout(() => {
+        orientationSyncTimer = 0;
+        syncCameraOrientationToDevice();
+    }, 120);
+}
 
 function isLikelyMobileDevice() {
     return window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 900;
@@ -988,6 +1028,8 @@ if (replayBtnEl) {
 }
 
 async function setupMediaPipeHands() {
+    const preferred = getPreferredCameraConstraints();
+
     handsInstance = new Hands({
         locateFile: (file) =>
             `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
@@ -1006,8 +1048,8 @@ async function setupMediaPipeHands() {
         onFrame: async () => {
             await handsInstance.send({ image: videoEl });
         },
-        width: 1280,
-        height: 720,
+        width: preferred.width.ideal,
+        height: preferred.height.ideal,
     });
 }
 
@@ -1025,6 +1067,7 @@ async function startCamera() {
         await setupMediaPipeHands();
         await cameraInstance.start();
         currentStream = videoEl.srcObject;
+        await syncCameraOrientationToDevice();
         overlayEl.classList.add("hidden");
         updateRotateHintVisibility();
 
@@ -1042,9 +1085,16 @@ startBtnEl.addEventListener("click", startCamera);
 
 window.addEventListener("resize", updateRotateHintVisibility);
 window.addEventListener("orientationchange", updateRotateHintVisibility);
+window.addEventListener("resize", scheduleCameraOrientationSync);
+window.addEventListener("orientationchange", scheduleCameraOrientationSync);
 
 window.addEventListener("beforeunload", () => {
     clearPendingCenterEffects();
+
+    if (orientationSyncTimer) {
+        clearTimeout(orientationSyncTimer);
+        orientationSyncTimer = 0;
+    }
 
     if (cameraInstance) {
         cameraInstance.stop();
