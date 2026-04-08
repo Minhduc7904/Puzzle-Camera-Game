@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Full Camera View</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <main class="app">
+        <video id="camera" autoplay playsinline muted></video>
+        <canvas id="handCanvas"></canvas>
+        <div class="hud" id="hud">Số tay phát hiện: 0</div>
+        <div class="scoreboard" id="scoreBoard">Thời gian: 0.0s | Kỷ lục: --</div>
+        <button id="replayBtn" class="replay-btn" type="button">Chơi lại</button>
+        <div class="rotate-hint hidden" id="rotateHint">Vui lòng xoay ngang điện thoại để chơi tốt hơn</div>
+        <img id="gameStartFx" class="game-start-fx" src="GameStart.png" alt="Game Start" />
+
+        <div class="overlay" id="overlay">
+            <h1>Puzzle Camera Game</h1>
+            <p id="message">Nhấn nút bên dưới để bật camera và nhận diện tối đa 2 tay.</p>
+            <p class="author-note">Cho tác giả xin 1 like và follow <a href="https://www.tiktok.com/@nmduc__" target="_blank" rel="noopener noreferrer">@nmduc__</a></p>
+            <button id="startBtn" type="button">Bắt đầu</button>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

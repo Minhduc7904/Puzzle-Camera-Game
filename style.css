@@ -1,0 +1,262 @@
+:root {
+    --overlay-bg: rgba(10, 12, 20, 0.45);
+    --text-color: #ffffff;
+    --button-bg: #1f6feb;
+    --button-bg-hover: #3a82f7;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #000;
+}
+
+.app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#camera {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: #000;
+}
+
+#handCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.hud {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.95rem;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+}
+
+.scoreboard {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    z-index: 2;
+    transform: translateX(-50%);
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.95rem;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+}
+
+.replay-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 2;
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    background: #ff7a18;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.replay-btn:hover {
+    background: #ff8d39;
+}
+
+.rotate-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    z-index: 5;
+    transform: translateX(-50%);
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.62);
+    backdrop-filter: blur(4px);
+    max-width: min(92vw, 460px);
+}
+
+.rotate-hint.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.game-start-fx {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 4;
+    width: min(86vw, 760px);
+    transform: translate(-50%, -50%) scale(0.2);
+    transform-origin: center;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.game-start-fx.play {
+    animation: gameStartReveal 2550ms cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes gameStartReveal {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2);
+    }
+
+    48% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    64% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.12);
+    }
+
+    76% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.03);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.03);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.03);
+    }
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    place-content: center;
+    gap: 12px;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-color);
+    background: linear-gradient(to top, var(--overlay-bg), rgba(0, 0, 0, 0.15));
+}
+
+.overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.8vw, 2rem);
+}
+
+p {
+    margin: 0;
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+}
+
+.author-note {
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    opacity: 0.95;
+}
+
+.author-note a {
+    color: #8fd3ff;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.author-note a:hover {
+    color: #b5e5ff;
+}
+
+button {
+    justify-self: center;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    background: var(--button-bg);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--button-bg-hover);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 820px) {
+    .hud,
+    .scoreboard,
+    .replay-btn {
+        top: calc(8px + env(safe-area-inset-top));
+    }
+
+    .hud {
+        left: 8px;
+        padding: 6px 10px;
+        font-size: 0.78rem;
+        max-width: 36vw;
+    }
+
+    .scoreboard {
+        top: calc(42px + env(safe-area-inset-top));
+        padding: 6px 10px;
+        font-size: 0.78rem;
+        max-width: 86vw;
+        white-space: nowrap;
+    }
+
+    .replay-btn {
+        right: 8px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .overlay {
+        padding: 16px;
+    }
+
+    button {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+
+    .game-start-fx {
+        width: min(94vw, 700px);
+    }
+}
