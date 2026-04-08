@@ -4,8 +4,42 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Full Camera View</title>
+    <title>Puzzle Camera Game | Trò chơi ghép hình bằng camera và cử chỉ tay</title>
+    <meta name="description" content="Puzzle Camera Game là trò chơi ghép hình 3x3 bằng camera và nhận diện cử chỉ tay. Dùng ngón cái + ngón trỏ để chụp ảnh, kéo thả khối và chinh phục kỷ lục thời gian." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="author" content="nmduc__" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:title" content="Puzzle Camera Game" />
+    <meta property="og:description" content="Trò chơi ghép hình 3x3 bằng camera và cử chỉ tay với bảng xếp hạng thời gian." />
+    <meta property="og:image" content="LOGO.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Puzzle Camera Game" />
+    <meta name="twitter:description" content="Ghép hình 3x3 bằng camera và cử chỉ tay, theo dõi kỷ lục thời gian ngay trên màn hình." />
+    <meta name="twitter:image" content="LOGO.png" />
+
+    <link rel="icon" type="image/png" href="LOGO.png" />
+    <link rel="apple-touch-icon" href="LOGO.png" />
+
     <link rel="stylesheet" href="style.css" />
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "VideoGame",
+            "name": "Puzzle Camera Game",
+            "inLanguage": "vi",
+            "applicationCategory": "Game",
+            "operatingSystem": "Web Browser",
+            "description": "Trò chơi ghép hình 3x3 dùng camera và nhận diện cử chỉ tay để kéo thả các khối hình.",
+            "author": {
+                "@type": "Person",
+                "name": "nmduc__"
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -30,6 +64,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
     <script src="script.js"></script>
+    <noscript>Puzzle Camera Game cần bật JavaScript để sử dụng camera và chơi ghép hình bằng cử chỉ tay.</noscript>
 </body>
 
 </html>
