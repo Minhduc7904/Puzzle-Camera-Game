@@ -108,31 +108,6 @@ function updateRotateHintVisibility() {
     setRotateHintVisible(shouldShow);
 }
 
-async function requestLandscapeOnMobile() {
-    if (!isLikelyMobileDevice()) {
-        return;
-    }
-
-    try {
-        const rootEl = document.documentElement;
-        if (!document.fullscreenElement && rootEl.requestFullscreen) {
-            await rootEl.requestFullscreen();
-        }
-    } catch (error) {
-        // Ignore fullscreen failures and continue.
-    }
-
-    try {
-        if (screen.orientation && screen.orientation.lock) {
-            await screen.orientation.lock("landscape");
-        }
-    } catch (error) {
-        // Some browsers do not allow orientation lock.
-    }
-
-    updateRotateHintVisibility();
-}
-
 function loadBestScore() {
     const raw = localStorage.getItem(SCORE_STORAGE_KEY);
     const parsed = Number(raw);
@@ -1063,7 +1038,6 @@ async function startCamera() {
     messageEl.textContent = "Đang bật camera và mô hình nhận diện tay...";
 
     try {
-        await requestLandscapeOnMobile();
         await setupMediaPipeHands();
         await cameraInstance.start();
         currentStream = videoEl.srcObject;
